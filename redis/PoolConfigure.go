@@ -1,7 +1,7 @@
 package redis
 
 type PoolConfigure struct {
-	Host int
+	Host string
 	Port int
 	Auth string
 	Db int

@@ -45,7 +45,7 @@ func (this *RedisAdapter) GetByte(key string) ([]byte, error) {
 	return v, err
 }
 
-func (this *RedisAdapter) Setex(key string, expire int, data []byte) bool {
+func (this *RedisAdapter) Setex(key string, data interface{}, expire int) bool {
 	this.Connection()
 	defer this.conn.Close()
 	_, err := this.conn.Do("setex", key, expire, data)
@@ -54,4 +54,18 @@ func (this *RedisAdapter) Setex(key string, expire int, data []byte) bool {
 		throw.Throw(err, 0)
 	}
 	return true
+}
+
+func (this *RedisAdapter) Expire(key string, seconds int) (bool, error) {
+	this.Connection()
+	defer this.conn.Close()
+	b, err := redis.Bool(this.conn.Do("expire", key, seconds))
+	return b, err
+}
+
+func (this *RedisAdapter) Ttl(key string) (int, error) {
+	this.Connection()
+	defer this.conn.Close()
+	ttl, err := redis.Int(this.conn.Do("ttl", key))
+	return ttl, err
 }
