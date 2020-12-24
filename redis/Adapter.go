@@ -63,6 +63,16 @@ func (this *RedisAdapter) Eval(script string, numkeys int, args ...interface{}) 
 	return this.Executor("eval", params...)
 }
 
+func (this *RedisAdapter) Incr(key string) (int, error) {
+	r, err := redis.Int(this.Executor("incr", key))
+	return r, err
+}
+
+func (this *RedisAdapter) IncrBy(key string, score int) (int, error) {
+	r, err := redis.Int(this.Executor("incrby", key, score))
+	return r, err
+}
+
 func (this *RedisAdapter) Close() {
 	defer this.conn.Close()
 }
