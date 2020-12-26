@@ -7,7 +7,7 @@ import (
 )
 
 func main()  {
-	redis.New(redis.PoolConfigure{Host:"192.168.8.99",Port:6379,Auth:"1qaz2wsx",
+	redis.New(redis.PoolConfigure{Host:"192.168.42.131",Port:6379,Auth:"1qaz2wsx",
 		Db:0,MaxConnections:10, MaxIdle:3, MaxIdleTime:60})
 	v, _ := redis.Redis.Get("name")
 	fmt.Println(v)
@@ -22,19 +22,19 @@ func main()  {
 	ttl = ttl + 500
 	b, _ := redis.Redis.Expire("name", ttl)
 	fmt.Println(b)
-	//s := ""
-	//s += "local stockKey = KEYS[1]"
-	//s += "local num = tonumber(KEYS[2])"
-	//s += "local stockNum = redis.call('GET', stockKey)"
-	//s += "if not stockNum or tonumber(stockNum) < num  then"
-	//s += "  return 0"
-	//s += "end"
-	//s += "redis.call('decrBy', stockKey, num)"
-	//s += "return 1"
-	//r, _ := redis.Redis.Eval(s, 2, "stock", 1)
-	//fmt.Println(r)
-	r, _ := redis.Redis.Incr("abc")
+	s := `local stockKey = KEYS[1]
+local num = tonumber(KEYS[2])
+local stockNum = redis.call('GET', stockKey)
+if not stockNum or tonumber(stockNum) < num  then
+  return 0
+end
+redis.call('decrBy', stockKey, num)
+return 1
+`
+	r, _ := redis.Redis.Eval(s, 2, "stock", 1)
 	fmt.Println(r)
-	r, _ = redis.Redis.IncrBy("abc", 5)
-	fmt.Println(r)
+	r1, _ := redis.Redis.Incr("abc")
+	fmt.Println(r1)
+	r2, _ := redis.Redis.IncrBy("abc", 5)
+	fmt.Println(r2)
 }
