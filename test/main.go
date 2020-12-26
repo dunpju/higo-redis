@@ -37,4 +37,8 @@ return 1
 	fmt.Println(r1)
 	r2, _ := redis.Redis.IncrBy("abc", 5)
 	fmt.Println(r2)
+	r1, _ = redis.Redis.Decr("abc")
+	fmt.Println(r1)
+	r2, _ = redis.Redis.DecrBy("abc", 3)
+	fmt.Println(r2)
 }

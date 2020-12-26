@@ -73,6 +73,16 @@ func (this *RedisAdapter) IncrBy(key string, score int) (int, error) {
 	return r, err
 }
 
+func (this *RedisAdapter) Decr(key string) (int, error) {
+	r, err := redis.Int(this.Executor("decr", key))
+	return r, err
+}
+
+func (this *RedisAdapter) DecrBy(key string, score int) (int, error) {
+	r, err := redis.Int(this.Executor("decrby", key, score))
+	return r, err
+}
+
 func (this *RedisAdapter) Close() {
 	defer this.conn.Close()
 }
