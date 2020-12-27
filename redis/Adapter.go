@@ -83,6 +83,34 @@ func (this *RedisAdapter) DecrBy(key string, score int) (int, error) {
 	return r, err
 }
 
+func (this *RedisAdapter) Lpush(key string, v interface{}) (int, error) {
+
+}
+
+func (this *RedisAdapter) Llen() (int, error) {
+
+}
+
+func (this *RedisAdapter) Lrange() {
+
+}
+
+func (this *RedisAdapter) Rpush() (int, error) {
+
+}
+
+func (this *RedisAdapter) Del(key string) (int, error) {
+
+}
+
+func (this *RedisAdapter) Zset() {
+
+}
+
+func (this *RedisAdapter)Hash()  {
+	
+}
+
 func (this *RedisAdapter) Close() {
 	defer this.conn.Close()
 }
