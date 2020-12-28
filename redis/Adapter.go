@@ -35,6 +35,11 @@ func (this *RedisAdapter) Setnx(key string, v interface{}) (bool, error) {
 	return b, err
 }
 
+func (this *RedisAdapter) Setex(key string, data interface{}, expire int) (bool, error) {
+	b, err := redis.Bool(this.Executor("setex", key, expire, data))
+	return b, err
+}
+
 func (this *RedisAdapter) Get(key string) string {
 	return NewStringResult(redis.String(this.Executor("get", key))).Unwrap().ToString()
 }
@@ -44,17 +49,23 @@ func (this *RedisAdapter) GetDefault(key string, v string) string {
 }
 
 func (this *RedisAdapter) Mget(keys ...string) []string {
-	return NewSliceResult(redis.Strings(this.Executor("mget", keys))).Unwrap().ToStrings()
+	return NewStringsResult(redis.Strings(this.Executor("mget", this.args(keys...)...))).Unwrap().ToStrings()
+}
+
+func (this *RedisAdapter) MgetIterable(keys ...string) *Iterator {
+	return NewSliceResult(redis.Strings(this.Executor("mget", this.args(keys...)...))).Unwrap().Iterable()
+}
+
+func (this *RedisAdapter) args(keys ...string) (args []interface{}) {
+	for _, k := range keys {
+		args = append(args, k)
+	}
+	return
 }
 
 func (this *RedisAdapter) GetByte(key string) ([]byte, error) {
 	v, err := redis.Bytes(this.Executor("get", key))
 	return v, err
-}
-
-func (this *RedisAdapter) Setex(key string, data interface{}, expire int) (bool, error) {
-	b, err := redis.Bool(this.Executor("setex", key, expire, data))
-	return b, err
 }
 
 func (this *RedisAdapter) Expire(key string, seconds int) (bool, error) {

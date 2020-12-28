@@ -7,13 +7,16 @@ import (
 )
 
 func main()  {
-	redis.New(redis.PoolConfigure{Host:"192.168.42.131",Port:6379,Auth:"1qaz2wsx",
+	redis.New(redis.PoolConfigure{Host:"192.168.8.99",Port:6379,Auth:"1qaz2wsx",
 		Db:0,MaxConnections:10, MaxIdle:3, MaxIdleTime:60})
+	v1 := redis.Redis.MgetIterable("name2", "name1")
+	for v1.HasNext() {
+		//fmt.Printf("%s\n",v1.Next())
+		fmt.Println(v1.Next())
+	}
+	return
 	v := redis.Redis.Get("name")
 	fmt.Println(v)
-	v1 := redis.Redis.Mget("name")
-	fmt.Println(v1)
-	return
 	if v == "" {
 		_, _ = redis.Redis.Setex("name", rand.Intn(1000), 200)
 	}
