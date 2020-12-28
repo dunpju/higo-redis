@@ -9,8 +9,9 @@ import (
 func main()  {
 	redis.New(redis.PoolConfigure{Host:"192.168.42.131",Port:6379,Auth:"1qaz2wsx",
 		Db:0,MaxConnections:10, MaxIdle:3, MaxIdleTime:60})
-	v, _ := redis.Redis.Get("name")
+	v := redis.Redis.Get("name")
 	fmt.Println(v)
+	return
 	if v == "" {
 		_, _ = redis.Redis.Setex("name", rand.Intn(1000), 200)
 	}

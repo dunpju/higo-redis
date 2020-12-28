@@ -1,6 +1,10 @@
 package redis
 
 type IResult interface {
-	Unwrap()
-	Default(v string) string
+	Unwrap() ResultType
+	Default(v string) ResultType
+}
+
+type ResultType interface {
+	Output(out *interface{})
 }

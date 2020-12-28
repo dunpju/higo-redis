@@ -1,26 +1,34 @@
 package redis
 
-import "github.com/dengpju/higo-throw/throw"
+import (
+	"github.com/dengpju/higo-throw/throw"
+)
 
 type StringResult struct {
 	Result string
 	Err    error
 }
 
+func (this *StringResult) Output(out *interface{}) {
+	*out = this.Result
+}
+
 func NewStringResult(result string, err error) *StringResult {
 	return &StringResult{Result: result, Err: err}
 }
 
-func (this *StringResult) Unwrap() string {
+func (this *StringResult) Unwrap() ResultType {
 	if this.Err != nil {
 		throw.Throw(this.Err, 0)
 	}
-	return this.Result
+	return this
 }
 
-func (this *StringResult) Default(v string) string {
+func (this *StringResult) Default(v string) ResultType {
 	if this.Err != nil {
-		return v
+		this.Result = v
+		return this
 	}
-	return this.Result
+	return this
 }
+

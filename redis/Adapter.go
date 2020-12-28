@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"fmt"
 	"github.com/dengpju/higo-throw/throw"
 	"github.com/gomodule/redigo/redis"
 )
@@ -35,9 +36,11 @@ func (this *RedisAdapter) Setnx(key string, v interface{}) (bool, error) {
 	return b, err
 }
 
-func (this *RedisAdapter) Get(key string) (string, error) {
-	v, err := redis.String(this.Executor("get", key))
-	return v, err
+func (this *RedisAdapter) Get(key string) string {
+	out := new(interface{})
+	NewStringResult(redis.String(this.Executor("get", key))).Default("555").Output(out)
+	fmt.Println(*out)
+	return (*out).(string)
 }
 
 func (this *RedisAdapter) GetByte(key string) ([]byte, error) {
@@ -87,26 +90,26 @@ func (this *RedisAdapter) DecrBy(key string, score int) (int, error) {
 	r, err := redis.Int(this.Executor("decrby", key, score))
 	return r, err
 }
-
-func (this *RedisAdapter) Lpush(key string, v interface{}) (int, error) {
-
-}
-
-func (this *RedisAdapter) Llen() (int, error) {
-
-}
-
-func (this *RedisAdapter) Lrange() {
-
-}
-
-func (this *RedisAdapter) Rpush() (int, error) {
-
-}
-
-func (this *RedisAdapter) Del(key string) (int, error) {
-
-}
+//
+//func (this *RedisAdapter) Lpush(key string, v interface{}) (int, error) {
+//
+//}
+//
+//func (this *RedisAdapter) Llen() (int, error) {
+//
+//}
+//
+//func (this *RedisAdapter) Lrange() {
+//
+//}
+//
+//func (this *RedisAdapter) Rpush() (int, error) {
+//
+//}
+//
+//func (this *RedisAdapter) Del(key string) (int, error) {
+//
+//}
 
 func (this *RedisAdapter) Zset() {
 
