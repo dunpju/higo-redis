@@ -1,18 +1,18 @@
 package redis
 
-type StringResult struct {
+type SliceResult struct {
 	*Reply
 }
 
-func NewStringResult(result string, err error) *StringResult {
+func NewSliceResult(result []string, err error) *StringResult {
 	return &StringResult{&Reply{Result:result, Err: err}}
 }
 
-func (this *StringResult) Unwrap() *Reply {
+func (this *SliceResult) Unwrap() *Reply {
 	return this.Reply
 }
 
-func (this *StringResult) Default(v string) *Reply {
+func (this *SliceResult) Default(v string) *Reply {
 	if this.Err != nil {
 		this.Result = v
 		return this.Reply

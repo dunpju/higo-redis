@@ -1,7 +1,6 @@
 package redis
 
 import (
-	"fmt"
 	"github.com/dengpju/higo-throw/throw"
 	"github.com/gomodule/redigo/redis"
 )
@@ -37,10 +36,15 @@ func (this *RedisAdapter) Setnx(key string, v interface{}) (bool, error) {
 }
 
 func (this *RedisAdapter) Get(key string) string {
-	out := new(interface{})
-	NewStringResult(redis.String(this.Executor("get", key))).Default("555").Output(out)
-	fmt.Println(*out)
-	return (*out).(string)
+	return NewStringResult(redis.String(this.Executor("get", key))).Unwrap().ToString()
+}
+
+func (this *RedisAdapter) GetDefault(key string, v string) string {
+	return NewStringResult(redis.String(this.Executor("get", key))).Default(v).ToString()
+}
+
+func (this *RedisAdapter) Mget(keys ...string) []string {
+	return NewSliceResult(redis.Strings(this.Executor("mget", keys))).Unwrap().ToStrings()
 }
 
 func (this *RedisAdapter) GetByte(key string) ([]byte, error) {

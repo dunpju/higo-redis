@@ -11,6 +11,8 @@ func main()  {
 		Db:0,MaxConnections:10, MaxIdle:3, MaxIdleTime:60})
 	v := redis.Redis.Get("name")
 	fmt.Println(v)
+	v1 := redis.Redis.Mget("name")
+	fmt.Println(v1)
 	return
 	if v == "" {
 		_, _ = redis.Redis.Setex("name", rand.Intn(1000), 200)
