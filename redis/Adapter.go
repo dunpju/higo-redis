@@ -30,6 +30,11 @@ func (this *RedisAdapter) Set(key string, v interface{}) (bool, error) {
 	return b, err
 }
 
+func (this *RedisAdapter) Setnx(key string, v interface{}) (bool, error) {
+	b, err := redis.Bool(this.Executor("setnx", key, v))
+	return b, err
+}
+
 func (this *RedisAdapter) Get(key string) (string, error) {
 	v, err := redis.String(this.Executor("get", key))
 	return v, err
