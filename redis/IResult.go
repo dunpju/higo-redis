@@ -1,6 +1,8 @@
 package redis
 
-import "github.com/dengpju/higo-throw/throw"
+import (
+	"github.com/dengpju/higo-throw/throw"
+)
 
 type IResult interface {
 	Unwrap() *Reply
@@ -19,6 +21,7 @@ func (this *Reply) Unwrap() *Reply {
 func (this *Reply) Default(v string) *Reply {
 	if this.Err != nil {
 		this.Result = v
+		this.Err = nil
 		return this
 	}
 	return this

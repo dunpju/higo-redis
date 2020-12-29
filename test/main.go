@@ -15,7 +15,7 @@ func main()  {
 		fmt.Println(v1.Next())
 	}
 
-	v := redis.Redis.Get("name")
+	v := redis.Redis.GetDefault("name", "")
 	fmt.Println(v)
 	if v == "" {
 		_ = redis.Redis.Setex("name", rand.Intn(1000), 200)
@@ -47,4 +47,10 @@ return 1
 	fmt.Println(r1)
 	r2 = redis.Redis.DecrBy("abc", 3)
 	fmt.Println(r2)
+	l1 := redis.Redis.Lrange("ll", 0, -1)
+	fmt.Println(l1)
+	l2 := redis.Redis.Lpush("ll", "ddd")
+	fmt.Println(l2)
+	l3 := redis.Redis.Rpop("ll")
+	fmt.Println(l3)
 }

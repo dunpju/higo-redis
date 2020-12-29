@@ -36,7 +36,13 @@ func (this *RedisAdapter) Setnx(key string, v interface{}) (bool, error) {
 }
 
 func (this *RedisAdapter) Setex(key string, v interface{}, expire int) bool {
-	return NewBoolResult(redis.Bool(this.Executor("setex", key, expire, v))).Unwrap().Bool()
+	reply, err := this.Executor("setex", key, expire, v)
+	if "OK" == reply {
+		reply = true
+	} else {
+		reply = false
+	}
+	return NewBoolResult(reply.(bool), err).Unwrap().Bool()
 }
 
 func (this *RedisAdapter) Get(key string) string {
@@ -109,11 +115,19 @@ func (this *RedisAdapter) Llen(key string) int {
 }
 
 func (this *RedisAdapter) Lrange(key string, start int, end int) []string {
-	return NewSliceResult(redis.Strings(this.Executor("lrange", key, start, end))).Unwrap().Strings()
+	return NewStringsResult(redis.Strings(this.Executor("lrange", key, start, end))).Unwrap().Strings()
+}
+
+func (this *RedisAdapter) Lpop(key string) string {
+	return NewStringResult(redis.String(this.Executor("lpop", key))).Unwrap().String()
 }
 
 func (this *RedisAdapter) Rpush(key string, v interface{}) int {
 	return NewIntResult(redis.Int(this.Executor("rpush", key, v))).Unwrap().Int()
+}
+
+func (this *RedisAdapter) Rpop(key string) string {
+	return NewStringResult(redis.String(this.Executor("rpop", key))).Unwrap().String()
 }
 
 func (this *RedisAdapter) Del(key string) int {
