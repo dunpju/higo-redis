@@ -25,14 +25,16 @@ func (this *RedisAdapter) Conn() redis.Conn {
 	return this.conn
 }
 
-func (this *RedisAdapter) Set(key string, v interface{}) (bool, error) {
-	b, err := redis.Bool(this.Executor("set", key, v))
-	return b, err
+func (this *RedisAdapter) Set(key string, v interface{}, args ...*Parameter) bool {
+	exp:=Parameters(args).Find(PARAM_EXPIRE)
+	if exp == nil {
+		exp=0
+	}
+	return NewBoolResult(redis.Bool(this.Executor("set", key, v))).Bool()
 }
 
-func (this *RedisAdapter) Setnx(key string, v interface{}) (bool, error) {
-	b, err := redis.Bool(this.Executor("setnx", key, v))
-	return b, err
+func (this *RedisAdapter) Setnx(key string, v interface{}) bool {
+	return NewBoolResult(redis.Bool(this.Executor("setnx", key, v))).Bool()
 }
 
 func (this *RedisAdapter) Setex(key string, v interface{}, expire int) bool {
