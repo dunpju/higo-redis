@@ -30,22 +30,27 @@ func (this *Reply) Error() {
 	}
 }
 
-func (this *Reply) ToString() string {
+func (this *Reply) String() string {
 	this.Error()
 	return this.Result.(string)
 }
 
-func (this *Reply) ToStrings() []string {
+func (this *Reply) Strings() []string {
 	this.Error()
 	return this.Result.([]string)
 }
 
-func (this *Reply) ToInt() int {
+func (this *Reply) Int() int {
 	this.Error()
 	return this.Result.(int)
 }
 
-func (this *Reply) ToSlice() []interface{} {
+func (this *Reply) Bool() bool {
+	this.Error()
+	return this.Result.(bool)
+}
+
+func (this *Reply) Slice() []interface{} {
 	this.Error()
 	return this.Result.([]interface{})
 }

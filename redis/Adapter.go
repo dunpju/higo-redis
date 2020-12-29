@@ -35,21 +35,20 @@ func (this *RedisAdapter) Setnx(key string, v interface{}) (bool, error) {
 	return b, err
 }
 
-func (this *RedisAdapter) Setex(key string, data interface{}, expire int) (bool, error) {
-	b, err := redis.Bool(this.Executor("setex", key, expire, data))
-	return b, err
+func (this *RedisAdapter) Setex(key string, v interface{}, expire int) bool {
+	return NewBoolResult(redis.Bool(this.Executor("setex", key, expire, v))).Unwrap().Bool()
 }
 
 func (this *RedisAdapter) Get(key string) string {
-	return NewStringResult(redis.String(this.Executor("get", key))).Unwrap().ToString()
+	return NewStringResult(redis.String(this.Executor("get", key))).Unwrap().String()
 }
 
 func (this *RedisAdapter) GetDefault(key string, v string) string {
-	return NewStringResult(redis.String(this.Executor("get", key))).Default(v).ToString()
+	return NewStringResult(redis.String(this.Executor("get", key))).Default(v).String()
 }
 
 func (this *RedisAdapter) Mget(keys ...string) []string {
-	return NewStringsResult(redis.Strings(this.Executor("mget", this.args(keys...)...))).Unwrap().ToStrings()
+	return NewStringsResult(redis.Strings(this.Executor("mget", this.args(keys...)...))).Unwrap().Strings()
 }
 
 func (this *RedisAdapter) MgetIterable(keys ...string) *Iterator {
@@ -73,9 +72,8 @@ func (this *RedisAdapter) Expire(key string, seconds int) (bool, error) {
 	return b, err
 }
 
-func (this *RedisAdapter) Ttl(key string) (int, error) {
-	ttl, err := redis.Int(this.Executor("ttl", key))
-	return ttl, err
+func (this *RedisAdapter) Ttl(key string) int {
+	return NewIntResult(redis.Int(this.Executor("ttl", key))).Unwrap().Int()
 }
 
 func (this *RedisAdapter) Eval(script string, numkeys int, args ...interface{}) (interface{}, error) {
@@ -86,52 +84,48 @@ func (this *RedisAdapter) Eval(script string, numkeys int, args ...interface{}) 
 	return this.Executor("eval", params...)
 }
 
-func (this *RedisAdapter) Incr(key string) (int, error) {
-	r, err := redis.Int(this.Executor("incr", key))
-	return r, err
+func (this *RedisAdapter) Incr(key string) int {
+	return NewIntResult(redis.Int(this.Executor("incr", key))).Unwrap().Int()
 }
 
-func (this *RedisAdapter) IncrBy(key string, score int) (int, error) {
-	r, err := redis.Int(this.Executor("incrby", key, score))
-	return r, err
+func (this *RedisAdapter) IncrBy(key string, score int) int {
+	return NewIntResult(redis.Int(this.Executor("incrby", key, score))).Unwrap().Int()
 }
 
-func (this *RedisAdapter) Decr(key string) (int, error) {
-	r, err := redis.Int(this.Executor("decr", key))
-	return r, err
+func (this *RedisAdapter) Decr(key string) int {
+	return NewIntResult(redis.Int(this.Executor("decr", key))).Unwrap().Int()
 }
 
-func (this *RedisAdapter) DecrBy(key string, score int) (int, error) {
-	r, err := redis.Int(this.Executor("decrby", key, score))
-	return r, err
+func (this *RedisAdapter) DecrBy(key string, score int) int {
+	return NewIntResult(redis.Int(this.Executor("decrby", key, score))).Unwrap().Int()
 }
-//
-//func (this *RedisAdapter) Lpush(key string, v interface{}) (int, error) {
-//
-//}
-//
-//func (this *RedisAdapter) Llen() (int, error) {
-//
-//}
-//
-//func (this *RedisAdapter) Lrange() {
-//
-//}
-//
-//func (this *RedisAdapter) Rpush() (int, error) {
-//
-//}
-//
-//func (this *RedisAdapter) Del(key string) (int, error) {
-//
-//}
+
+func (this *RedisAdapter) Lpush(key string, v interface{}) int {
+	return NewIntResult(redis.Int(this.Executor("lpush", key, v))).Unwrap().Int()
+}
+
+func (this *RedisAdapter) Llen(key string) int {
+	return NewIntResult(redis.Int(this.Executor("llen", key))).Unwrap().Int()
+}
+
+func (this *RedisAdapter) Lrange(key string, start int, end int) []string {
+	return NewSliceResult(redis.Strings(this.Executor("lrange", key, start, end))).Unwrap().Strings()
+}
+
+func (this *RedisAdapter) Rpush(key string, v interface{}) int {
+	return NewIntResult(redis.Int(this.Executor("rpush", key, v))).Unwrap().Int()
+}
+
+func (this *RedisAdapter) Del(key string) int {
+	return NewIntResult(redis.Int(this.Executor("del", key))).Unwrap().Int()
+}
 
 func (this *RedisAdapter) Zset() {
 
 }
 
-func (this *RedisAdapter)Hash()  {
-	
+func (this *RedisAdapter) Hash() {
+
 }
 
 func (this *RedisAdapter) Close() {

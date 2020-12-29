@@ -7,20 +7,20 @@ import (
 )
 
 func main()  {
-	redis.New(redis.PoolConfigure{Host:"192.168.8.99",Port:6379,Auth:"1qaz2wsx",
+	redis.New(redis.PoolConfigure{Host:"192.168.42.131",Port:6379,Auth:"1qaz2wsx",
 		Db:0,MaxConnections:10, MaxIdle:3, MaxIdleTime:60})
-	v1 := redis.Redis.MgetIterable("name2", "name1")
+	v1 := redis.Redis.MgetIterable("name", "name1")
 	for v1.HasNext() {
 		//fmt.Printf("%s\n",v1.Next())
 		fmt.Println(v1.Next())
 	}
-	return
+
 	v := redis.Redis.Get("name")
 	fmt.Println(v)
 	if v == "" {
-		_, _ = redis.Redis.Setex("name", rand.Intn(1000), 200)
+		_ = redis.Redis.Setex("name", rand.Intn(1000), 200)
 	}
-	ttl, _ := redis.Redis.Ttl("name")
+	ttl := redis.Redis.Ttl("name")
 	fmt.Println(ttl)
 	if ttl < 0 {
 		ttl = 0
@@ -39,12 +39,12 @@ return 1
 `
 	r, _ := redis.Redis.Eval(s, 2, "stock", 1)
 	fmt.Println(r)
-	r1, _ := redis.Redis.Incr("abc")
+	r1 := redis.Redis.Incr("abc")
 	fmt.Println(r1)
-	r2, _ := redis.Redis.IncrBy("abc", 5)
+	r2 := redis.Redis.IncrBy("abc", 5)
 	fmt.Println(r2)
-	r1, _ = redis.Redis.Decr("abc")
+	r1 = redis.Redis.Decr("abc")
 	fmt.Println(r1)
-	r2, _ = redis.Redis.DecrBy("abc", 3)
+	r2 = redis.Redis.DecrBy("abc", 3)
 	fmt.Println(r2)
 }
