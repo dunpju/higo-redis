@@ -25,26 +25,16 @@ func (this *RedisAdapter) Conn() redis.Conn {
 	return this.conn
 }
 
-func (this *RedisAdapter) Set(key string, v interface{}, args ...*Parameter) bool {
-	exp:=Parameters(args).Find(PARAM_EXPIRE)
-	if exp == nil {
-		exp=0
-	}
-	return NewBoolResult(redis.Bool(this.Executor("set", key, v))).Bool()
+func (this *RedisAdapter) Set(key string, v interface{}, args ...*Parameter) string {
+	return NewStringResult(redis.String(this.Executor("set", Parameters(args).Handle(key, v)...))).String()
 }
 
 func (this *RedisAdapter) Setnx(key string, v interface{}) bool {
 	return NewBoolResult(redis.Bool(this.Executor("setnx", key, v))).Bool()
 }
 
-func (this *RedisAdapter) Setex(key string, v interface{}, expire int) bool {
-	reply, err := this.Executor("setex", key, expire, v)
-	if "OK" == reply {
-		reply = true
-	} else {
-		reply = false
-	}
-	return NewBoolResult(reply.(bool), err).Unwrap().Bool()
+func (this *RedisAdapter) Setex(key string, v interface{}, expire int) string {
+	return NewStringResult(redis.String(this.Executor("setex", key, expire, v))).Unwrap().String()
 }
 
 func (this *RedisAdapter) Get(key string) string {
@@ -55,12 +45,12 @@ func (this *RedisAdapter) GetDefault(key string, v string) string {
 	return NewStringResult(redis.String(this.Executor("get", key))).Default(v).String()
 }
 
-func (this *RedisAdapter) Mget(keys ...string) []string {
-	return NewStringsResult(redis.Strings(this.Executor("mget", this.args(keys...)...))).Unwrap().Strings()
+func (this *RedisAdapter) Mget(key string, keys ...*Parameter) []string {
+	return NewStringsResult(redis.Strings(this.Executor("mget", Parameters(keys).Handle(key)...))).Unwrap().Strings()
 }
 
-func (this *RedisAdapter) MgetIterable(keys ...string) *Iterator {
-	return NewSliceResult(redis.Strings(this.Executor("mget", this.args(keys...)...))).Unwrap().Iterable()
+func (this *RedisAdapter) MgetIterable(key string, keys ...*Parameter) *Iterator {
+	return NewSliceResult(redis.Strings(this.Executor("mget", Parameters(keys).Handle(key)...))).Unwrap().Iterable()
 }
 
 func (this *RedisAdapter) args(keys ...string) (args []interface{}) {
@@ -84,12 +74,8 @@ func (this *RedisAdapter) Ttl(key string) int {
 	return NewIntResult(redis.Int(this.Executor("ttl", key))).Unwrap().Int()
 }
 
-func (this *RedisAdapter) Eval(script string, numkeys int, args ...interface{}) (interface{}, error) {
-	params := make([]interface{}, 0)
-	params = append(params, script)
-	params = append(params, numkeys)
-	params = append(params, args...)
-	return this.Executor("eval", params...)
+func (this *RedisAdapter) Eval(script string, args ...*Parameter) (interface{}, error) {
+	return this.Executor("eval", Parameters(args).Handle(script)...)
 }
 
 func (this *RedisAdapter) Incr(key string) int {

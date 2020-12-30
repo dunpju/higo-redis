@@ -9,7 +9,9 @@ import (
 func main()  {
 	redis.New(redis.PoolConfigure{Host:"192.168.8.99",Port:6379,Auth:"1qaz2wsx",
 		Db:0,MaxConnections:10, MaxIdle:3, MaxIdleTime:60})
-	v1 := redis.Redis.MgetIterable("name", "name1")
+
+	redis.Redis.Set("set_name","ggg", redis.WithExpire(60))
+	v1 := redis.Redis.MgetIterable("name", redis.WithKey("name1"))
 	for v1.HasNext() {
 		//fmt.Printf("%s\n",v1.Next())
 		fmt.Println(v1.Next())
@@ -37,7 +39,7 @@ end
 redis.call('decrBy', stockKey, num)
 return 1
 `
-	r, _ := redis.Redis.Eval(s, 2, "stock1", 1)
+	r, _ := redis.Redis.Eval(s, redis.WithEvalNumkeys(2), redis.WithEvalKey("stock1"), redis.WithEvalKey(1))
 	fmt.Println(r)
 	r1 := redis.Redis.Incr("abc")
 	fmt.Println(r1)
