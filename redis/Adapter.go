@@ -38,7 +38,11 @@ func (this *RedisAdapter) Setex(key string, v interface{}, expire int) string {
 }
 
 func (this *RedisAdapter) Get(key string) string {
-	return NewStringResult(redis.String(this.Executor("get", key))).Unwrap().String()
+	return this.get(key).Unwrap().String()
+}
+
+func (this *RedisAdapter) get(key string) *StringResult {
+	return NewStringResult(redis.String(this.Executor("get", key)))
 }
 
 func (this *RedisAdapter) GetDefault(key string, v string) string {

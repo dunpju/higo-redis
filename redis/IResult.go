@@ -22,7 +22,14 @@ func (this *Reply) Default(v string) *Reply {
 	if this.Err != nil {
 		this.Result = v
 		this.Err = nil
-		return this
+	}
+	return this
+}
+
+func (this *Reply) DefaultFunc(f func() string) *Reply {
+	if this.Err != nil {
+		this.Result = f()
+		this.Err = nil
 	}
 	return this
 }

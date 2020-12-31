@@ -3,13 +3,14 @@ package main
 import (
 	"fmt"
 	"github.com/dengpju/higo-redis/redis"
+	"log"
 	"math/rand"
 )
 
 func main()  {
 	redis.New(
 		redis.NewPoolConfigure(
-			redis.PoolHost("192.168.42.131"),
+			redis.PoolHost("192.168.8.99"),
 			redis.PoolPort(6379),
 			redis.PoolAuth("1qaz2wsx"),
 			redis.PoolDb(0),
@@ -17,6 +18,14 @@ func main()  {
 			redis.PoolMaxIdle(3),
 			redis.PoolMaxIdleTime(60),
 		))
+
+	newsCache := redis.NewSimpleCache(redis.NewStringOperation(), redis.WithExpire(15))
+	newsCache.DbGetter = func() string {
+		log.Println("get from db")
+		return "news by id=123"
+	}
+	fmt.Println(newsCache.GetCache("news123"))
+
 
 	redis.Redis.Set("set_name","ggg", redis.WithExpire(60))
 	v1 := redis.Redis.MgetIterable("name", redis.WithKey("name1"))

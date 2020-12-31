@@ -11,3 +11,4 @@ func NewStringResult(result string, err error) *StringResult {
 func NewStringsResult(result []string, err error) *StringResult {
 	return &StringResult{&Reply{Result:result, Err: err}}
 }
+

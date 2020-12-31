@@ -63,3 +63,7 @@ func WithExpire(t time.Duration) *Parameter {
 func WithNx() *Parameter {
 	return NewParameter(PARAM_NX, "")
 }
+
+func WithXx() *Parameter {
+	return NewParameter(PARAM_XX, "")
+}
