@@ -7,8 +7,16 @@ import (
 )
 
 func main()  {
-	redis.New(redis.PoolConfigure{Host:"192.168.8.99",Port:6379,Auth:"1qaz2wsx",
-		Db:0,MaxConnections:10, MaxIdle:3, MaxIdleTime:60})
+	redis.New(
+		redis.NewPoolConfigure(
+			redis.PoolHost("192.168.42.131"),
+			redis.PoolPort(6379),
+			redis.PoolAuth("1qaz2wsx"),
+			redis.PoolDb(0),
+			redis.PoolMaxConnections(10),
+			redis.PoolMaxIdle(3),
+			redis.PoolMaxIdleTime(60),
+		))
 
 	redis.Redis.Set("set_name","ggg", redis.WithExpire(60))
 	v1 := redis.Redis.MgetIterable("name", redis.WithKey("name1"))

@@ -11,7 +11,7 @@ var RedisPool *redis.Pool
 
 var redisOnce sync.Once
 
-func New(configure PoolConfigure) *redis.Pool {
+func New(configure *PoolConfigure) *redis.Pool {
 	redisOnce.Do(func() {
 		RedisPool = &redis.Pool {
 			MaxActive:   configure.MaxConnections,
