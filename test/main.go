@@ -19,6 +19,15 @@ func main()  {
 			redis.PoolMaxIdleTime(60),
 		))
 
+	//不用每个请求都实例化缓存操作
+	syncNewsCache := redis.NewsCache()
+	defer redis.ReleaseNewsCache(syncNewsCache)
+	syncNewsCache.DbGetter = func() string {
+		log.Println("sync get from db")
+		return "sync news by id=1235"
+	}
+	fmt.Println(syncNewsCache.GetCache("news1235"))
+
 	newsCache := redis.NewSimpleCache(redis.NewStringOperation(), redis.WithExpire(15))
 	newsCache.DbGetter = func() string {
 		log.Println("get from db")
