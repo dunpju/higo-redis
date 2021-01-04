@@ -9,7 +9,7 @@ var NewsCachePool *sync.Pool
 func init() {
 	NewsCachePool = &sync.Pool{
 		New: func() interface{} {
-			return NewSimpleCache(NewStringOperation(), WithExpire(15), SERILIZER_JSON)
+			return NewSimpleCache(NewStringOperation(), WithExpire(15), SERILIZER_JSON, NewCrossPolicy("^/news/\\d{1,5}$"))
 		},
 	}
 }
