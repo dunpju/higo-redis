@@ -22,6 +22,7 @@ type SimpleCache struct {
 }
 
 func NewSimpleCache(operation *StringOperation, expire *Parameter, serilizer string, policy CachePolicy) *SimpleCache {
+	policy.SetOperation(operation)
 	return &SimpleCache{Operation: operation, Expire: expire, Serilizer: serilizer, Policy: policy}
 }
 
@@ -64,7 +65,6 @@ func(this *SimpleCache) GetCache(key string) (ret interface{}){
 			return string(b)
 		}
 		ret=this.Operation.Get(key).DefaultFunc(f)
-		this.SetCache(key,ret)
 	}else if this.Serilizer==SERILIZER_GOB {
 		f := func() string {
 			obj:= this.DbGetter()
@@ -76,6 +76,11 @@ func(this *SimpleCache) GetCache(key string) (ret interface{}){
 			return buf.String()
 		}
 		ret = this.Operation.Get(key).DefaultFunc(f)
+
+	}
+	if ret.(string) == "" && this.Policy != nil {
+		this.Policy.IfNil(key, "")
+	} else {
 		this.SetCache(key, ret)
 	}
 	return

@@ -2,6 +2,7 @@ package redis
 
 import (
 	"sync"
+	"time"
 )
 
 var NewsCachePool *sync.Pool
@@ -9,7 +10,9 @@ var NewsCachePool *sync.Pool
 func init() {
 	NewsCachePool = &sync.Pool{
 		New: func() interface{} {
-			return NewSimpleCache(NewStringOperation(), WithExpire(15), SERILIZER_JSON, NewCrossPolicy("^/news/\\d{1,5}$"))
+			return NewSimpleCache(NewStringOperation(), WithExpire(15),
+				SERILIZER_JSON,
+				NewCrossPolicy("^/news/\\d{1,5}$", time.Second * 30))
 		},
 	}
 }

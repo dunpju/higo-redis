@@ -28,12 +28,15 @@ func main()  {
 	}
 	fmt.Println(syncNewsCache.GetCache("news1235"))
 
-	newsCache := redis.NewSimpleCache(redis.NewStringOperation(), redis.WithExpire(15), redis.SERILIZER_JSON)
+	newsCache := redis.NewSimpleCache(
+		redis.NewStringOperation(),
+		redis.WithExpire(15),
+		redis.SERILIZER_JSON, redis.NewCrossPolicy())
 	newsCache.DbGetter = func() interface{} {
 		log.Println("get from db")
 		return "news by id=123"
 	}
-	fmt.Println(newsCache.GetCache("news123"))
+	fmt.Println(newsCache.GetCacheForObject("news123"))
 
 
 	redis.Redis.Set("set_name","ggg", redis.WithExpire(60))
