@@ -35,7 +35,7 @@ func (this *Reply) DefaultFunc(f func() string) *Reply {
 }
 
 func (this *Reply) Error() {
-	if this.Err != nil {
+	if this.Err != nil && this.Err.Error() != "redigo: nil returned" {
 		throw.Throw(this.Err, 0)
 	}
 }
