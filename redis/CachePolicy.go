@@ -34,7 +34,5 @@ func (this *CrossPolicy)IfNil(key string, v interface{})  {
 }
 
 func (this *CrossPolicy)SetOperation(opt *StringOperation)  {
-	if regexp.MustCompile(this.KeyRegx).MatchString(key) {
-		panic("error cache key")
-	}
+	this.opt = opt
 }
