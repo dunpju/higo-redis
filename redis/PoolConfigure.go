@@ -1,23 +1,27 @@
 package redis
 
 const (
-	HOST            = "Host"
-	PORT            = "Port"
-	AUTH            = "Auth"
-	DB_NUM          = "Db"
-	MAX_CONNECTIONS = "MaxConnections"
-	MAX_IDLE        = "MaxIdle"
-	MAX_IDLE_TIME   = "MaxIdleTime"
+	HOST               = "Host"
+	PORT               = "Port"
+	AUTH               = "Auth"
+	DB_NUM             = "Db"
+	MAX_CONNECTIONS    = "MaxConnections"
+	MAX_IDLE           = "MaxIdle"
+	MAX_IDLE_TIME      = "MaxIdleTime"
+	MAX_CONN_LIFE_TIME = "MaxConnLifetime"
+	WAIT               = "Wait"
 )
 
 type PoolConfigure struct {
-	Host           string
-	Port           int
-	Auth           string
-	Db             int
-	MaxConnections int
-	MaxIdle        int
-	MaxIdleTime    int
+	Host            string
+	Port            int
+	Auth            string
+	Db              int
+	MaxConnections  int
+	MaxIdle         int
+	MaxIdleTime     int
+	MaxConnLifetime int
+	Wait            bool
 }
 
 func NewPoolConfigure(Attr ...*Attribute) *PoolConfigure {
@@ -49,6 +53,14 @@ func NewPoolConfigure(Attr ...*Attribute) *PoolConfigure {
 	maxIdleTime := Attributes(Attr).Find(MAX_IDLE_TIME)
 	if maxIdleTime != nil {
 		pool.MaxIdleTime = maxIdleTime.(int)
+	}
+	maxConnLifetime := Attributes(Attr).Find(MAX_IDLE_TIME)
+	if maxConnLifetime != nil {
+		pool.MaxConnLifetime = maxConnLifetime.(int)
+	}
+	wait := Attributes(Attr).Find(WAIT)
+	if wait != nil {
+		pool.Wait = wait.(bool)
 	}
 	return pool
 }
@@ -99,4 +111,12 @@ func PoolMaxIdle(maxIdle int) *Attribute {
 
 func PoolMaxIdleTime(maxIdleTime int) *Attribute {
 	return NewAttribute(MAX_IDLE_TIME, maxIdleTime)
+}
+
+func PoolMaxConnLifetime(maxConnLifetime int) *Attribute {
+	return NewAttribute(MAX_CONN_LIFE_TIME, maxConnLifetime)
+}
+
+func PoolWait(wait bool) *Attribute {
+	return NewAttribute(WAIT, wait)
 }

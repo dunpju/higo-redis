@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/dengpju/higo-redis/redis"
-	"log"
 	"math/rand"
 )
 
@@ -17,8 +16,11 @@ func main()  {
 			redis.PoolMaxConnections(10),
 			redis.PoolMaxIdle(3),
 			redis.PoolMaxIdleTime(60),
+			redis.PoolMaxConnLifetime(10),
+			redis.PoolWait(true),
 		))
 
+	/**
 	//不用每个请求都实例化缓存操作
 	syncNewsCache := redis.NewsCache()
 	defer redis.ReleaseNewsCache(syncNewsCache)
@@ -38,8 +40,14 @@ func main()  {
 	}
 	fmt.Println(newsCache.GetCacheForObject("news123"))
 
+	 */
+
 
 	redis.Redis.Set("set_name","ggg", redis.WithExpire(60))
+	for  {
+		fmt.Println(1)
+	}
+
 	v1 := redis.Redis.MgetIterable("name", redis.WithKey("name1"))
 	for v1.HasNext() {
 		//fmt.Printf("%s\n",v1.Next())

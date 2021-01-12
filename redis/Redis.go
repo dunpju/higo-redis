@@ -13,10 +13,12 @@ var redisOnce sync.Once
 
 func New(configure *PoolConfigure) *redis.Pool {
 	redisOnce.Do(func() {
-		RedisPool = &redis.Pool {
-			MaxActive:   configure.MaxConnections,
-			MaxIdle:     configure.MaxIdle,
-			IdleTimeout: time.Duration(configure.MaxIdleTime) * time.Second,
+		RedisPool = &redis.Pool{
+			MaxActive:       configure.MaxConnections,
+			MaxIdle:         configure.MaxIdle,
+			IdleTimeout:     time.Duration(configure.MaxIdleTime) * time.Second,
+			MaxConnLifetime: time.Duration(configure.MaxConnLifetime) * time.Second,
+			Wait:            configure.Wait,
 			Dial: func() (conn redis.Conn, e error) {
 				return redis.Dial("tcp",
 					fmt.Sprintf("%s:%d", configure.Host, configure.Port),
