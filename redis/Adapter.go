@@ -130,7 +130,35 @@ func (this *RedisAdapter) Zset() {
 
 }
 
+func (this *RedisAdapter) Zrangebyscore() {
+
+}
+
 func (this *RedisAdapter) Hash() {
+
+}
+
+func (this *RedisAdapter) Blpop() {
+
+}
+
+func (this *RedisAdapter) Blpoprpush() {
+
+}
+
+func (this *RedisAdapter) Brpop() {
+
+}
+
+func (this *RedisAdapter) Brpoplpush() {
+
+}
+
+func (this *RedisAdapter) Rpoplpush() {
+
+}
+
+func (this *RedisAdapter) Lpoprpush() {
 
 }
 
