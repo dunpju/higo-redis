@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"github.com/dengpju/higo-redis/redis"
 	"math/rand"
+	"time"
 )
 
 func main()  {
 	redis.New(
 		redis.NewPoolConfigure(
-			redis.PoolHost("192.168.8.99"),
+			redis.PoolHost("192.168.42.131"),
 			redis.PoolPort(6379),
 			redis.PoolAuth("1qaz2wsx"),
 			redis.PoolDb(0),
@@ -19,7 +20,11 @@ func main()  {
 			redis.PoolMaxConnLifetime(10),
 			redis.PoolWait(true),
 		))
-
+	rand.Seed(time.Now().Unix())
+	fmt.Println(redis.Redis.Lpush("testlist", rand.Intn(1000) + 1))
+	fmt.Println(redis.Redis.Brpoplpush("testlist", "dtestlist", redis.WithTimeout(time.Duration(60))))
+	fmt.Println("Brpoplpush finish")
+	return
 	/**
 	//不用每个请求都实例化缓存操作
 	syncNewsCache := redis.NewsCache()

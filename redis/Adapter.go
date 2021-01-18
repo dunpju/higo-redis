@@ -130,7 +130,7 @@ func (this *RedisAdapter) Zset() {
 
 }
 
-func (this *RedisAdapter) Zrangebyscore() {
+func (this *RedisAdapter) Zrangebyscore(key string, min int64, max int64) {
 
 }
 
@@ -138,28 +138,57 @@ func (this *RedisAdapter) Hash() {
 
 }
 
-func (this *RedisAdapter) Blpop() {
-
+func (this *RedisAdapter) Blpop(key string, args ...*Parameter) string {
+	param := make([]interface{}, 0)
+	param = append(param, key)
+	if len(args) > 0 {
+		timeout := Parameters(args).Find(TIMEOUT)
+		if timeout != nil {
+			param = append(param, timeout)
+		} else {
+			param = append(param, 30)
+		}
+	} else {
+		param = append(param, 30)
+	}
+	return NewStringResult(redis.String(this.Executor("blpop", param...))).Unwrap().String()
 }
 
-func (this *RedisAdapter) Blpoprpush() {
-
+func (this *RedisAdapter) Brpoplpush(source string, destination string, args ...*Parameter) string {
+	param := make([]interface{}, 0)
+	param = append(param, source)
+	param = append(param, destination)
+	if len(args) > 0 {
+		timeout := Parameters(args).Find(TIMEOUT)
+		if timeout != nil {
+			param = append(param, timeout)
+		} else {
+			param = append(param, 30)
+		}
+	} else {
+		param = append(param, 30)
+	}
+	return NewStringResult(redis.String(this.Executor("brpoplpush", param...))).Unwrap().String()
 }
 
-func (this *RedisAdapter) Brpop() {
-
+func (this *RedisAdapter) Brpop(key string, args ...*Parameter) string {
+	param := make([]interface{}, 0)
+	param = append(param, key)
+	if len(args) > 0 {
+		timeout := Parameters(args).Find(TIMEOUT)
+		if timeout != nil {
+			param = append(param, timeout)
+		} else {
+			param = append(param, 30)
+		}
+	} else {
+		param = append(param, 30)
+	}
+	return NewStringResult(redis.String(this.Executor("brpop", param...))).Unwrap().String()
 }
 
-func (this *RedisAdapter) Brpoplpush() {
-
-}
-
-func (this *RedisAdapter) Rpoplpush() {
-
-}
-
-func (this *RedisAdapter) Lpoprpush() {
-
+func (this *RedisAdapter) Rpoplpush(source string, destination string) string {
+	return NewStringResult(redis.String(this.Executor("rpoplpush", source, destination))).Unwrap().String()
 }
 
 func (this *RedisAdapter) Close() {

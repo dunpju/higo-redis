@@ -4,14 +4,17 @@ import (
 	"time"
 )
 
-const PARAM_EXPIRE = "EX"
-const PARAM_PX = "PX"
-const PARAM_NX = "NX"
-const PARAM_XX = "XX"
+const (
+	PARAM_EXPIRE = "EX"
+	PARAM_PX     = "PX"
+	PARAM_NX     = "NX"
+	PARAM_XX     = "XX"
+	TIMEOUT      = "timeout"
+)
 
 type Parameter struct {
-	Name    string
-	Value   interface{}
+	Name  string
+	Value interface{}
 }
 
 func NewParameter(name string, value interface{}) *Parameter {
@@ -66,4 +69,8 @@ func WithNx() *Parameter {
 
 func WithXx() *Parameter {
 	return NewParameter(PARAM_XX, "")
+}
+
+func WithTimeout(t time.Duration) *Parameter {
+	return NewParameter(TIMEOUT, int(t))
 }
