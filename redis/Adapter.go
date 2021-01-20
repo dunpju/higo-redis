@@ -130,6 +130,30 @@ func (this *RedisAdapter) Zset() {
 
 }
 
+func (this *RedisAdapter) Zadd(key string, score int64, name string, args ...*Parameter) string {
+	param := make([]interface{}, 0)
+	param = append(param, score)
+	param = append(param, name)
+	if len(args) > 0 {
+		for _, arg := range args {
+			param = append(param, arg.Value)
+			param = append(param, arg.Name)
+		}
+	}
+	return NewStringResult(redis.String(this.Executor("zadd", param...))).Unwrap().String()
+}
+
+func (this *RedisAdapter) Zrem(key string, name string, args ...*Parameter) string {
+	param := make([]interface{}, 0)
+	param = append(param, name)
+	if len(args) > 0 {
+		for _, arg := range args {
+			param = append(param, arg.Name)
+		}
+	}
+	return NewStringResult(redis.String(this.Executor("zrem", param...))).Unwrap().String()
+}
+
 func (this *RedisAdapter) Zrangebyscore(key string, min int64, max int64) {
 
 }
