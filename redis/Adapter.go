@@ -126,10 +126,6 @@ func (this *RedisAdapter) Del(key string) int {
 	return NewIntResult(redis.Int(this.Executor("del", key))).Unwrap().Int()
 }
 
-func (this *RedisAdapter) Zset() {
-
-}
-
 func (this *RedisAdapter) Zadd(key string, score int64, name string, args ...*Parameter) string {
 	param := make([]interface{}, 0)
 	param = append(param, score)
@@ -215,7 +211,6 @@ func (this *RedisAdapter) ZrevrangeByScore(key string, args ...*Parameter) []str
 		param = append(param, limit.([]interface{})[1])
 		param = append(param, limit.([]interface{})[2])
 	}
-
 	return NewStringsResult(redis.Strings(this.Executor("zrevrangebyscore", param...))).Unwrap().Strings()
 }
 

@@ -102,5 +102,5 @@ func WithScores() *Parameter {
 }
 
 func WithLimit(offset, count int) *Parameter {
-	return NewParameter(LIMIT, []interface{}{"LIMIT",offset,count})
+	return NewParameter(LIMIT, []interface{}{"LIMIT", offset, count})
 }
