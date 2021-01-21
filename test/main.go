@@ -19,7 +19,7 @@ func main()  {
 			redis.PoolMaxConnLifetime(10),
 			redis.PoolWait(true),
 		))
-	fmt.Println(redis.Redis.ZrangeByScore("salary", redis.WithSubInf(),redis.WithAddInf()))
+	fmt.Println(redis.Redis.ZrevrangeByScore("salary", redis.WithSubInf(),redis.WithAddInf()))
 	return
 	/**
 	rand.Seed(time.Now().Unix())

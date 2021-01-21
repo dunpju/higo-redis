@@ -1,7 +1,6 @@
 package redis
 
 import (
-	"fmt"
 	"github.com/dengpju/higo-throw/throw"
 	"github.com/gomodule/redigo/redis"
 )
@@ -158,40 +157,66 @@ func (this *RedisAdapter) Zrem(key string, name string, args ...*Parameter) stri
 func (this *RedisAdapter) ZrangeByScore(key string, args ...*Parameter) []string {
 	param := make([]interface{}, 0)
 	param = append(param, key)
-	if len(args) > 0 {
-		subinf := Parameters(args).Find(SUBINF)
-		if subinf != nil {
-			param = append(param, subinf)
-		}
-		addinf := Parameters(args).Find(ADDINF)
-		if addinf != nil {
-			param = append(param, addinf)
-		}
-		min := Parameters(args).Find(MIN)
-		if min != nil {
-			param = append(param, min)
-		}
-		max := Parameters(args).Find(MAX)
-		if max != nil {
-			param = append(param, max)
-		}
-		withscores := Parameters(args).Find(WITHSCORES)
-		if withscores != nil {
-			param = append(param, withscores)
-		}
-		limit := Parameters(args).Find(LIMIT)
-		if limit != nil {
-			param = append(param, limit.([]interface{})[0])
-			param = append(param, limit.([]interface{})[1])
-			param = append(param, limit.([]interface{})[2])
-		}
+	subinf := Parameters(args).Find(SUBINF)
+	if subinf != nil {
+		param = append(param, subinf)
 	}
-	fmt.Println(param)
+	addinf := Parameters(args).Find(ADDINF)
+	if addinf != nil {
+		param = append(param, addinf)
+	}
+	min := Parameters(args).Find(MIN)
+	if min != nil {
+		param = append(param, min)
+	}
+	max := Parameters(args).Find(MAX)
+	if max != nil {
+		param = append(param, max)
+	}
+	withscores := Parameters(args).Find(WITHSCORES)
+	if withscores != nil {
+		param = append(param, withscores)
+	}
+	limit := Parameters(args).Find(LIMIT)
+	if limit != nil {
+		param = append(param, limit.([]interface{})[0])
+		param = append(param, limit.([]interface{})[1])
+		param = append(param, limit.([]interface{})[2])
+	}
 	return NewStringsResult(redis.Strings(this.Executor("zrangebyscore", param...))).Unwrap().Strings()
 }
 
-func (this *RedisAdapter) ZrevrangeByScore(key string, min, max int64) {
+func (this *RedisAdapter) ZrevrangeByScore(key string, args ...*Parameter) []string {
+	param := make([]interface{}, 0)
+	param = append(param, key)
+	addinf := Parameters(args).Find(ADDINF)
+	if addinf != nil {
+		param = append(param, addinf)
+	}
+	subinf := Parameters(args).Find(SUBINF)
+	if subinf != nil {
+		param = append(param, subinf)
+	}
+	max := Parameters(args).Find(MAX)
+	if max != nil {
+		param = append(param, max)
+	}
+	min := Parameters(args).Find(MIN)
+	if min != nil {
+		param = append(param, min)
+	}
+	withscores := Parameters(args).Find(WITHSCORES)
+	if withscores != nil {
+		param = append(param, withscores)
+	}
+	limit := Parameters(args).Find(LIMIT)
+	if limit != nil {
+		param = append(param, limit.([]interface{})[0])
+		param = append(param, limit.([]interface{})[1])
+		param = append(param, limit.([]interface{})[2])
+	}
 
+	return NewStringsResult(redis.Strings(this.Executor("zrevrangebyscore", param...))).Unwrap().Strings()
 }
 
 func (this *RedisAdapter) Hash() {
