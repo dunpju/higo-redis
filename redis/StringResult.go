@@ -5,10 +5,9 @@ type StringResult struct {
 }
 
 func NewStringResult(result string, err error) *StringResult {
-	return &StringResult{&Reply{Result:result, Err: err}}
+	return &StringResult{&Reply{Result: result, Err: err}}
 }
 
 func NewStringsResult(result []string, err error) *StringResult {
-	return &StringResult{&Reply{Result:result, Err: err}}
+	return &StringResult{&Reply{Result: result, Err: err}}
 }
-

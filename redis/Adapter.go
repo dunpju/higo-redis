@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"fmt"
 	"github.com/dengpju/higo-throw/throw"
 	"github.com/gomodule/redigo/redis"
 )
@@ -154,7 +155,42 @@ func (this *RedisAdapter) Zrem(key string, name string, args ...*Parameter) stri
 	return NewStringResult(redis.String(this.Executor("zrem", param...))).Unwrap().String()
 }
 
-func (this *RedisAdapter) Zrangebyscore(key string, min int64, max int64) {
+func (this *RedisAdapter) ZrangeByScore(key string, args ...*Parameter) []string {
+	param := make([]interface{}, 0)
+	param = append(param, key)
+	if len(args) > 0 {
+		subinf := Parameters(args).Find(SUBINF)
+		if subinf != nil {
+			param = append(param, subinf)
+		}
+		addinf := Parameters(args).Find(ADDINF)
+		if addinf != nil {
+			param = append(param, addinf)
+		}
+		min := Parameters(args).Find(MIN)
+		if min != nil {
+			param = append(param, min)
+		}
+		max := Parameters(args).Find(MAX)
+		if max != nil {
+			param = append(param, max)
+		}
+		withscores := Parameters(args).Find(WITHSCORES)
+		if withscores != nil {
+			param = append(param, withscores)
+		}
+		limit := Parameters(args).Find(LIMIT)
+		if limit != nil {
+			param = append(param, limit.([]interface{})[0])
+			param = append(param, limit.([]interface{})[1])
+			param = append(param, limit.([]interface{})[2])
+		}
+	}
+	fmt.Println(param)
+	return NewStringsResult(redis.Strings(this.Executor("zrangebyscore", param...))).Unwrap().Strings()
+}
+
+func (this *RedisAdapter) ZrevrangeByScore(key string, min, max int64) {
 
 }
 

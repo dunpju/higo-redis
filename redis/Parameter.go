@@ -10,6 +10,12 @@ const (
 	PARAM_NX     = "NX"
 	PARAM_XX     = "XX"
 	TIMEOUT      = "timeout"
+	SUBINF       = "-inf"
+	ADDINF       = "+inf"
+	MIN          = "min"
+	MAX          = "max"
+	WITHSCORES   = "WITHSCORES"
+	LIMIT        = "LIMIT"
 )
 
 type Parameter struct {
@@ -73,4 +79,28 @@ func WithXx() *Parameter {
 
 func WithTimeout(t time.Duration) *Parameter {
 	return NewParameter(TIMEOUT, int(t))
+}
+
+func WithAddInf() *Parameter {
+	return NewParameter(ADDINF, ADDINF)
+}
+
+func WithSubInf() *Parameter {
+	return NewParameter(SUBINF, SUBINF)
+}
+
+func WithMin(min string) *Parameter {
+	return NewParameter(MIN, min)
+}
+
+func WithMax(max string) *Parameter {
+	return NewParameter(MAX, max)
+}
+
+func WithScores() *Parameter {
+	return NewParameter(WITHSCORES, WITHSCORES)
+}
+
+func WithLimit(offset, count int) *Parameter {
+	return NewParameter(LIMIT, []interface{}{"LIMIT",offset,count})
 }
