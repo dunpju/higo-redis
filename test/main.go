@@ -9,7 +9,7 @@ import (
 func main()  {
 	redis.New(
 		redis.NewPoolConfigure(
-			redis.PoolHost("192.168.42.131"),
+			redis.PoolHost("192.168.8.99"),
 			redis.PoolPort(6379),
 			redis.PoolAuth("1qaz2wsx"),
 			redis.PoolDb(0),

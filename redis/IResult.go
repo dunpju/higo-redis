@@ -1,7 +1,7 @@
 package redis
 
 import (
-	"github.com/dengpju/higo-throw/throw"
+	"github.com/dengpju/higo-throw/exception"
 )
 
 type IResult interface {
@@ -36,7 +36,7 @@ func (this *Reply) DefaultFunc(f func() string) *Reply {
 
 func (this *Reply) Error() {
 	if this.Err != nil && this.Err.Error() != "redigo: nil returned" {
-		throw.Throw(this.Err, 0)
+		exception.Throw(exception.Message(this.Err), exception.Code(0))
 	}
 }
 

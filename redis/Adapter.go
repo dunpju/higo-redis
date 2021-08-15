@@ -1,7 +1,7 @@
 package redis
 
 import (
-	"github.com/dengpju/higo-throw/throw"
+	"github.com/dengpju/higo-throw/exception"
 	"github.com/gomodule/redigo/redis"
 )
 
@@ -280,7 +280,7 @@ func (this *RedisAdapter) Executor(commandName string, args ...interface{}) (int
 	reply, err := this.Conn().Do(commandName, args...)
 	if err != nil {
 		this.Close()
-		throw.Throw(err, 0)
+		exception.Throw(exception.Message(err), exception.Code(0))
 	}
 	return reply, err
 }
