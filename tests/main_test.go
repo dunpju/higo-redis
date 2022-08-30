@@ -1,25 +1,28 @@
-package main
+package tests
 
 import (
 	"fmt"
 	"github.com/dengpju/higo-redis/redis"
 	"math/rand"
+	"testing"
 )
 
-func main()  {
+func Test(t *testing.T) {
 	redis.New(
 		redis.NewPoolConfigure(
-			redis.PoolHost("192.168.8.99"),
+			redis.PoolHost("r-2vch1zlkij3lsswm2tpddf.redis.cn-chengdu.rds.aliyuncs.com"),
 			redis.PoolPort(6379),
-			redis.PoolAuth("1qaz2wsx"),
-			redis.PoolDb(0),
+			redis.PoolAuth("0jBCkqV9H8afWz8DDiJ85wfMJBCnnqUxdf"),
+			redis.PoolDb(2),
 			redis.PoolMaxConnections(10),
 			redis.PoolMaxIdle(3),
 			redis.PoolMaxIdleTime(60),
 			redis.PoolMaxConnLifetime(10),
 			redis.PoolWait(true),
 		))
-	fmt.Println(redis.Redis.ZrevrangeByScore("salary", redis.WithSubInf(),redis.WithAddInf()))
+	fmt.Println(111)
+	redis.Redis.Set("ttt", 11)
+	fmt.Println(redis.Redis.ZrevrangeByScore("salary", redis.WithSubInf(), redis.WithAddInf()))
 	return
 	/**
 	rand.Seed(time.Now().Unix())
@@ -27,7 +30,7 @@ func main()  {
 	fmt.Println(redis.Redis.Brpoplpush("testlist", "dtestlist", redis.WithTimeout(time.Duration(60))))
 	fmt.Println("Brpoplpush finish")
 
-	 */
+	*/
 
 	/**
 	//不用每个请求都实例化缓存操作
@@ -49,11 +52,10 @@ func main()  {
 	}
 	fmt.Println(newsCache.GetCacheForObject("news123"))
 
-	 */
+	*/
 
-
-	redis.Redis.Set("set_name","ggg", redis.WithExpire(60))
-	for  {
+	redis.Redis.Set("set_name", "ggg", redis.WithExpire(60))
+	for {
 		fmt.Println(1)
 	}
 
