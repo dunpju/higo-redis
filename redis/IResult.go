@@ -1,7 +1,7 @@
 package redis
 
 import (
-	"github.com/dengpju/higo-throw/exception"
+	"github.com/dunpju/higo-throw/exception"
 )
 
 type IResult interface {

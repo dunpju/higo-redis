@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"github.com/dengpju/higo-redis/redis"
+	"github.com/dunpju/higo-redis/redis"
 	"reflect"
 	"testing"
 )

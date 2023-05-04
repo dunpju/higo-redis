@@ -2,7 +2,7 @@ package tests
 
 import (
 	"fmt"
-	"github.com/dengpju/higo-redis/redis"
+	"github.com/dunpju/higo-redis/redis"
 	"math/rand"
 	"testing"
 )
@@ -10,9 +10,9 @@ import (
 func Test(t *testing.T) {
 	redis.New(
 		redis.NewPoolConfigure(
-			redis.PoolHost("r-2vch1zlkij3lsswm2tpddf.redis.cn-chengdu.rds.aliyuncs.com"),
+			redis.PoolHost("192.168.8.99"),
 			redis.PoolPort(6379),
-			redis.PoolAuth("0jBCkqV9H8afWz8DDiJ85wfMJBCnnqUxdf"),
+			redis.PoolAuth("1qaz2wsx"),
 			redis.PoolDb(2),
 			redis.PoolMaxConnections(10),
 			redis.PoolMaxIdle(3),
